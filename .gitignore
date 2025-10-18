@@ -1,0 +1,9 @@
+
+.env
+
+
+firebase-service-account.json
+
+
+consistent_1       # Compiled executable (for Linux/macOS)
+consistent_1.exe   # Compiled executable (for Windows)
