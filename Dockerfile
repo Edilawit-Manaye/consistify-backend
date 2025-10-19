@@ -69,6 +69,38 @@
 
 
 
+# # Stage 1: Build the Go application
+# FROM golang:1.24-alpine AS builder
+
+# WORKDIR /app
+
+# COPY go.mod go.sum ./
+# RUN go mod download
+
+# COPY . .
+# RUN CGO_ENABLED=0 go build -ldflags "-s -w" -o consistent_1 ./Delivery
+
+# # Stage 2: Create the final lean production image
+# FROM alpine:latest
+
+# WORKDIR /root/
+
+# COPY --from=builder /app/consistent_1 .
+
+# # Install bash (needed if using bash syntax)
+# RUN apk add --no-cache bash
+
+# # --- SECURE FIREBASE SERVICE ACCOUNT HANDLING ---
+# # Create .env file for your Go app
+# RUN echo "FIREBASE_SERVICE_ACCOUNT_PATH=./firebase-service-account.json" > .env
+
+# # At runtime, create the service account JSON file from env variable
+# ENTRYPOINT ["/bin/sh", "-c", "echo \"$FIREBASE_SERVICE_ACCOUNT_JSON_CONTENT\" > firebase-service-account.json && ./consistent_1"]
+# # --- END SECURE FIREBASE HANDLING ---
+
+# EXPOSE 8080
+
+
 # Stage 1: Build the Go application
 FROM golang:1.24-alpine AS builder
 
@@ -85,6 +117,10 @@ FROM alpine:latest
 
 WORKDIR /root/
 
+# --- ONLY ADDITION: Install tzdata for timezone recognition ---
+RUN apk update && apk add --no-cache tzdata
+# -------------------------------------------------------------
+
 COPY --from=builder /app/consistent_1 .
 
 # Install bash (needed if using bash syntax)
@@ -99,6 +135,11 @@ ENTRYPOINT ["/bin/sh", "-c", "echo \"$FIREBASE_SERVICE_ACCOUNT_JSON_CONTENT\" > 
 # --- END SECURE FIREBASE HANDLING ---
 
 EXPOSE 8080
+
+
+
+
+
 
 
 
