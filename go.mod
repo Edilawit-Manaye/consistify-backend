@@ -1,9 +1,12 @@
 module consistent_1
 
-go 1.24.4
+go 1.24.0
+
+toolchain go1.24.4
 
 require (
 	firebase.google.com/go v3.13.0+incompatible
+	// firebase.google.com/go v3.12.0+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.11.0
@@ -11,7 +14,9 @@ require (
 	github.com/spf13/viper v1.21.0
 	go.mongodb.org/mongo-driver v1.17.4
 	golang.org/x/crypto v0.43.0
+	// golang.org/x/crypto v0.17.0
 	google.golang.org/api v0.252.0
+// google.golang.org/api v0.170.0
 )
 
 require (
