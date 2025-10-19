@@ -88,14 +88,14 @@ RUN CGO_ENABLED=0 go build -ldflags "-s -w" -o consistent_1 ./Delivery
 
 FROM alpine:latest
 
-WORKDIR /app # Changed to /app for consistency and clarity
+WORKDIR /app # Good practice: Set working directory to /app
 
-COPY --from=builder /app/consistent_1 . 
+# Corrected COPY command:
+# Specify the full destination path explicitly.
+# This copies /app/consistent_1 from 'builder' to /app/consistent_1 in the final image.
+COPY --from=builder /app/consistent_1 /app/consistent_1
 
 # --- Firebase Service Account Handling ---
-# No explicit file creation here.
-# Your Go application will read FIREBASE_SERVICE_ACCOUNT_JSON_CONTENT
-# directly from its environment variables at runtime.
 RUN echo "FIREBASE_PROJECT_ID=${FIREBASE_PROJECT_ID}" > ./.env
 # --- END Firebase Handling ---
 
